@@ -7,6 +7,13 @@
 </head>
 <body>
     <h1>To-Do List</h1>
+    <!-- Form for adding a new task -->
+    <form action="/add" method="post">
+        <input type="text" name="task" placeholder="Enter a new task" required>
+        <button type="submit">Add Task</button>
+    </form>
+
+    <!-- List of tasks -->
     <ul>
         {% for task in tasks %}
             <li>{{ task }}</li>
