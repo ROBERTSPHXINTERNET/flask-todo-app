@@ -23,13 +23,23 @@ tasks = []
 
 @app.route('/')
 def home():
+    conn = sqlite3.connect('tasks.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM tasks')
+    tasks = cursor.fetchall()
+    conn.close()
     return render_template('index.html', tasks=tasks)
 
 @app.route('/add', methods=['POST'])
 def add_task():
     task = request.form.get('task')
     if task:
-        tasks.append(task)
+        # tasks.append(task)
+        conn = sqlite3.connect('tasks.db')
+        cursor = conn.cursor()
+        cursor.execute('INSERT INTO tasks (title) VALUES (?)', (task,))
+        conn.commit()
+        conn.close()
     return redirect(url_for('home'))
 
 @app.route('/delete/<int:task_id>')
