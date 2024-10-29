@@ -1,18 +1,34 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 import sqlite3
+from flask_bcrypt import Bcrypt
+from flask_session import Session
+
 app = Flask(__name__)
+app.secret_key = "supersecretkey"
+app.config["SESSION_TYPE"] = "filesystem"
+Session(app)
+bcrypt = Bcrypt(app)
 
 def init_db():
     conn = sqlite3.connect('tasks.db')
     cursor = conn.cursor()
     cursor.execute('''
-                   CREATE TABLE IF NOT EXISTS tasks (
-                   id INTEGER PRIMARY KEY AUTOINCREMENT,
-                   title TEXT NOT NULL,
-                   status TEXT DEFAULT 'pending',
-                   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-                   )
-                   ''')
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL
+        )
+    ''')
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS tasks (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER,
+            title TEXT NOT NULL,
+            status TEXT DEFAULT 'pending',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users (id)
+        )
+    ''')
     conn.commit()
     conn.close()
 
