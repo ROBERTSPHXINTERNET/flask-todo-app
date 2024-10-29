@@ -39,6 +39,8 @@ tasks = []
 
 @app.route('/')
 def home():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
     conn = sqlite3.connect('tasks.db')
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM tasks')
@@ -48,6 +50,8 @@ def home():
 
 @app.route('/add', methods=['POST'])
 def add_task():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
     task = request.form.get('task')
     if task:
         # tasks.append(task)
