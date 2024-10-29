@@ -1,73 +1,107 @@
+/* General layout styling */
 body {
     font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     margin: 0;
-    background-color: #f0f0f0;
 }
 
 .container {
-    width: 300px;
+    width: 400px;
     padding: 20px;
     border-radius: 8px;
-    background-color: #fff;
-    box-shadow: 0px 0px 10px rga(0,0,0,0.1);
+    background-color: #ffffff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
 }
 
 h1 {
     color: #333;
-    text-align: center;
-    margin-bottom: 10px;
+    margin-top: 0;
 }
 
-ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-form {
-    margin-bottom: 20px;
+/* Navigation bar styling */
+.navbar {
     display: flex;
     justify-content: space-between;
+    padding: 10px;
+    background-color: #007bff;
+    color: #ffffff;
+    border-radius: 8px 8px 0 0;
 }
 
-input[types="text"] {
-    flex: 1;
-    padding: 8px;
-    margin-right: 10px;
+.navbar a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.navbar a:hover {
+    color: #d4d4d4;
+}
+
+/* Form styling */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+input[type="text"],
+input[type="password"],
+select {
+    padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    font-size: 14px;
+    width: 100%;
 }
 
 button {
-    padding: 8px 12px;
+    padding: 10px;
+    font-size: 14px;
     background-color: #007bff;
-    color:#fff;
+    color: #ffffff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 button:hover {
     background-color: #0056b3;
 }
 
+.logout-btn {
+    background-color: #dc3545;
+}
+
+.logout-btn:hover {
+    background-color: #b32e33;
+}
+
+/* Task list styling */
+ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
 li {
-    padding: 8px;
-    margin-bottom: 8px;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 4px;
     display: flex;
     justify-content: space-between;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    margin-bottom: 10px;
 }
 
 li a {
     color: #dc3545;
-    text-decoration: none;
     font-weight: bold;
-    cursor: pointer;
+    text-decoration: none;
 }

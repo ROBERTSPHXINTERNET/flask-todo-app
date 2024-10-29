@@ -8,7 +8,12 @@
 </head>
 <body>
     <div class="container">
-    <h1>To-Do List</h1>
+        <div class="navbar">
+            <span>Welcome, {{ session.get('username', 'Guest') }}</span>
+            <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+        </div>
+
+        <h1>To-Do List</h1>
     <!-- Form for adding a new task -->
     <form action="/add" method="post">
         <input type="text" name="task" placeholder="Enter a new task" required>
@@ -26,6 +31,5 @@
         {% endfor %}
     </ul>
 </div>
-<a href="{{ url_for('logout') }}">Logout</a>
 </body>
 </html>

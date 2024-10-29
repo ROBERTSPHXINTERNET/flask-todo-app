@@ -39,7 +39,7 @@ tasks = []
 
 @app.route('/')
 def home():
-    if 'user_id' not in session or session['user_id'] is None:
+    if 'user_id' not in session or session['user_id'] is None or session['user_id'] is 'Guest':
         return redirect(url_for('login'))
     conn = sqlite3.connect('tasks.db')
     cursor = conn.cursor()
@@ -128,6 +128,7 @@ def login():
 
         if user and bcrypt.check_password_hash(user[2], password):
             session['user_id'] = user[0]
+            session['username'] = username
             return redirect(url_for('home'))
         else:
             return "Invalid credentials. Please try again."
@@ -137,6 +138,7 @@ def login():
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)
+    session.pop('username', None)
     return redirect(url_for('login'))
 
 if __name__ == '__main__':
