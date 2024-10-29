@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Task</title>
+</head>
+<body>
+    <h1>Edit Task</h1>
+    <form method="post">
+        <input type="text" name="title" value="{{ task[1] }}" required>
+        <select name="status">
+            <option value="pending" {% if task[2] == 'pending' %}selected{% endif %}>Pending</option>
+            <option value="completed" {% if task[2] == 'completed' %}selected{% endif %}>Completed</option>
+        </select>
+        <button type="submit">Save Changes</button>
+    </form>
+    <a href="{{ url_for('home') }}">Back to Home</a>
+</body>
+</html>

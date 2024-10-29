@@ -48,5 +48,25 @@ def delete_task(task_id):
         tasks.pop(task_id)
     return redirect(url_for('home'))
 
+@app.route('/edit/<int:task_id>', methods=['GET', 'POST'])
+def edit_task(task_id):
+    conn = sqlite3.connect('tasks.db')
+    cursor = conn.cursor()
+    
+    if request.method == 'POST':
+        new_title = request.form.get('title')
+        new_status = request.form.get('status')
+        cursor.execute('''
+            UPDATE tasks SET title = ?, status = ? WHERE id = ?
+        ''', (new_title, new_status, task_id))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('home'))
+    
+    cursor.execute('SELECT * FROM tasks WHERE id = ?', (task_id,))
+    task = cursor.fetchone()
+    conn.close()
+    return render_template('edit.html', task=task)
+
 if __name__ == '__main__':
     app.run(debug=True)
