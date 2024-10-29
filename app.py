@@ -84,5 +84,45 @@ def edit_task(task_id):
     conn.close()
     return render_template('edit.html', task=task)
 
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        hashed_pw = bcrypt.generate_password_hash(password).decode('utf-8')
+
+        conn = sqlite3.connect('tasks.db')
+        cursor = conn.cursor()
+        try:
+            cursor.execute('INSERT INTO users (username, password) VALUES (?, ?)', (username, hashed_pw))
+            conn.commit()
+        except sqlite3.IntegrityError:
+            return "Username already exists. Please choose another one."
+        finally:
+            conn.close()
+
+        return redirect(url_for('login'))
+    return render_template('register.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        conn = sqlite3.connect('tasks.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM users WHERE username = ?', (username,))
+        user = cursor.fetchone()
+        conn.close()
+
+        if user and bcrypt.check_password_hash(user[2], password):
+            session['user_id'] = user[0]
+            return redirect(url_for('home'))
+        else:
+            return "Invalid credentials. Please try again."
+
+    return render_template('login.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
