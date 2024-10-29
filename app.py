@@ -64,8 +64,14 @@ def add_task():
 
 @app.route('/delete/<int:task_id>')
 def delete_task(task_id):
-    if 0<=task_id<len(tasks):
-        tasks.pop(task_id)
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    conn = sqlite3.connect('tasks.db')
+    cursor = conn.cursor()
+    cursor.execute('DELETE FROM tasks WHERE id = ? AND user_id = ?', (task_id, session['user_id']))
+    conn.commit()
+    conn.close()
+
     return redirect(url_for('home'))
 
 @app.route('/edit/<int:task_id>', methods=['GET', 'POST'])
