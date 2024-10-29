@@ -39,7 +39,7 @@ tasks = []
 
 @app.route('/')
 def home():
-    if 'user_id' not in session or session['user_id'] is None or session['user_id'] is 'Guest':
+    if 'user_id' not in session or session['user_id'] is None or session['user_id'] == 'Guest':
         return redirect(url_for('login'))
     conn = sqlite3.connect('tasks.db')
     cursor = conn.cursor()
