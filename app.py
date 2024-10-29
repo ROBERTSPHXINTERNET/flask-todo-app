@@ -39,11 +39,11 @@ tasks = []
 
 @app.route('/')
 def home():
-    if 'user_id' not in session:
+    if 'user_id' not in session or session['user_id'] is None:
         return redirect(url_for('login'))
     conn = sqlite3.connect('tasks.db')
     cursor = conn.cursor()
-    cursor.execute('SELECT * FROM tasks')
+    cursor.execute('SELECT * FROM tasks WHERE user_id = ?', (session['user_id'],))
     tasks = cursor.fetchall()
     conn.close()
     return render_template('index.html', tasks=tasks)
@@ -57,7 +57,7 @@ def add_task():
         # tasks.append(task)
         conn = sqlite3.connect('tasks.db')
         cursor = conn.cursor()
-        cursor.execute('INSERT INTO tasks (title) VALUES (?)', (task,))
+        cursor.execute('INSERT INTO tasks (title, user_id) VALUES (?, ?)', (task, session['user_id']))
         conn.commit()
         conn.close()
     return redirect(url_for('home'))
