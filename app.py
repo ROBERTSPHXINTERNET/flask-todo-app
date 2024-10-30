@@ -138,12 +138,13 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        role = request.form.get('role', 'member')
         hashed_pw = bcrypt.generate_password_hash(password).decode('utf-8')
 
-        conn = sqlite3.connect('tasks.db')
+        conn = sqlite3.connect('project_management.db')
         cursor = conn.cursor()
         try:
-            cursor.execute('INSERT INTO users (username, password) VALUES (?, ?)', (username, hashed_pw))
+            cursor.execute('INSERT INTO users (username, password, role) VALUES (?, ?, ?)', (username, hashed_pw, role))
             conn.commit()
         except sqlite3.IntegrityError:
             return "Username already exists. Please choose another one."
@@ -159,7 +160,7 @@ def login():
         username = request.form['username']
         password = request.form['password']
 
-        conn = sqlite3.connect('tasks.db')
+        conn = sqlite3.connect('project_management.db')
         cursor = conn.cursor()
         cursor.execute('SELECT * FROM users WHERE username = ?', (username,))
         user = cursor.fetchone()
@@ -168,11 +169,38 @@ def login():
         if user and bcrypt.check_password_hash(user[2], password):
             session['user_id'] = user[0]
             session['username'] = username
+            session['role'] = user[3]  # Add role to the session
             return redirect(url_for('home'))
         else:
             return "Invalid credentials. Please try again."
 
     return render_template('login.html')
+
+@app.route('/create_project', methods=['GET', 'POST'])
+def create_project():
+    if 'user_id' not in session or session['role'] != 'admin':
+        return redirect(url_for('login'))
+    if request.method == 'POST':
+        name = request.form['name']
+        description = request.form['description']
+        conn = sqlite3.connect('project_management.db')
+        cursor = conn.cursor()
+        cursor.execute('INSERT INTO projects (name, description) VALUES (?, ?)', (name, description))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('home'))
+    return render_template('create_project.html')
+
+@app.route('/projects')
+def view_projects():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    conn = sqlite3.connect('project_management.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM projects')
+    projects = cursor.fetchall()
+    conn.close()
+    return render_template('projects.html', projects=projects)
 
 @app.route('/logout')
 def logout():
