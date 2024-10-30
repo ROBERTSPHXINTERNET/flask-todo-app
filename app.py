@@ -202,6 +202,19 @@ def view_projects():
     conn.close()
     return render_template('projects.html', projects=projects)
 
+"""
+TODO: Create a route to add Tasks
+TODO: Create a route to edit Tasks
+TODO: Create a route to delete Tasks
+TODO: Create a route to view Tasks
+TODO: Create a route to view Tasks by Project
+TODO: Create a route to view Projects by User
+TODO: Create a route to view Tasks by User
+TODO: Create a route to view Tasks by Status
+TODO: Create a route to view Tasks by Project and Status
+TODO: Create a route to view Projects by Status
+"""
+
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)
