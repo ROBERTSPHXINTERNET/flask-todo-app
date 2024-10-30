@@ -8,18 +8,15 @@
 </head>
 <body>
     <div class="container">
-        <div class="navbar">
-            <span>Welcome, {{ session.get('username', 'Guest') }}</span>
-            <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
-        </div>
-    <h1>Login</h1>
-    <form method="post">
-        <label>Username:</label>
-        <input type="text" name="username" required>
-        <label>Password:</label>
-        <input type="password" name="password" required>
-        <button type="submit">Login</button>
-    </form>
-    <a href="{{ url_for('register') }}">Don't have an account? Register here.</a>
+        <h1>Login</h1>
+        <form method="post">
+            <label>Username:</label>
+            <input type="text" name="username" required>
+            <label>Password:</label>
+            <input type="password" name="password" required>
+            <button type="submit">Login</button>
+        </form>
+        <a href="{{ url_for('register') }}">Don't have an account? Register here.</a>
+    </div>
 </body>
 </html>
